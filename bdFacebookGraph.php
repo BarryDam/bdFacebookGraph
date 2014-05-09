@@ -33,6 +33,10 @@
 		public function fetchByRequest($getStrGraphRequest = false)
 		{
 			if (! $getStrGraphRequest) return ;
+			// check for first backslash
+			if (strpos($getStrGraphRequest, '/') !== 0) {
+				$getStrGraphRequest = '/'.$getStrGraphRequest;
+			}
 			try {
 				$arrFBrequest = (new FacebookRequest(
 					$this->FacebookSession, 
