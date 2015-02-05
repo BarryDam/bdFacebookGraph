@@ -38,11 +38,12 @@
 				$getStrGraphRequest = '/'.$getStrGraphRequest;
 			}
 			try {
-				$arrFBrequest = (new FacebookRequest(
+				$objFacebookRequest = new FacebookRequest(
 					$this->FacebookSession, 
 					'GET',
 					$getStrGraphRequest
-				))->execute()->getGraphObject()->asArray();	
+				);
+				$arrFBrequest = $objFacebookRequest->execute()->getGraphObject()->asArray();	
 				
 			} catch (FacebookRequestException $e) {
 				echo "Exception occured, code: " . $e->getCode();

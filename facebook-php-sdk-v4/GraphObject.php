@@ -102,7 +102,8 @@ class GraphObject
       if (is_scalar($value)) {
         return $value;
       } else {
-        return (new GraphObject($value))->cast($type);
+        $obj = new GraphObject($value);
+        return $obj->cast($type);
       }
     } else {
       return null;
@@ -136,7 +137,8 @@ class GraphObject
       if (is_scalar($value)) {
         $out[$key] = $value;
       } else {
-        $out[$key] = (new GraphObject($value))->cast($type);
+        $obj = new GraphObject($value);
+        $out[$key] = $obj->cast($type);
       }
     }
     return $out;

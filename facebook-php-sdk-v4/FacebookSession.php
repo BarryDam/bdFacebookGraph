@@ -79,14 +79,15 @@ class FacebookSession
   {
     $targetAppId = static::_getTargetAppId($appId);
     $targetAppSecret = static::_getTargetAppSecret($appSecret);
-    return (new FacebookRequest(
+    $objFacebookRequest = new FacebookRequest(
       static::newAppSession($targetAppId, $targetAppSecret),
       'GET',
       '/debug_token',
       array(
         'input_token' => $this->getToken(),
       )
-    ))->execute()->getGraphObject(GraphSessionInfo::className());
+    );
+    return $objFacebookRequest->execute()->getGraphObject(GraphSessionInfo::className());
   }
 
   /**
@@ -111,12 +112,13 @@ class FacebookSession
     );
     // The response for this endpoint is not JSON, so it must be handled
     //   differently, not as a GraphObject.
-    $response = (new FacebookRequest(
-      self::newAppSession($targetAppId, $targetAppSecret),
-      'GET',
-      '/oauth/access_token',
-      $params
-    ))->execute()->getResponse();
+    $objFacebookRequest = new FacebookRequest(
+        self::newAppSession($targetAppId, $targetAppSecret),
+        'GET',
+        '/oauth/access_token',
+        $params
+      );
+    $response = $objFacebookRequest->execute()->getResponse();
     if ($response) {
       return new FacebookSession($response['access_token']);
     } else {
@@ -143,12 +145,13 @@ class FacebookSession
       'client_secret' => $targetAppSecret,
       'redirect_uri' => ''
     );
-    $response = (new FacebookRequest(
-      self::newAppSession($targetAppId, $targetAppSecret),
-      'GET',
-      '/oauth/client_code',
-      $params
-    ))->execute()->getGraphObject();
+    $objFacebookRequest = new FacebookRequest(
+        self::newAppSession($targetAppId, $targetAppSecret),
+        'GET',
+        '/oauth/client_code',
+        $params
+      );
+    $response = $objFacebookRequest->execute()->getGraphObject();
     return $response->getProperty('code');
   }
 
@@ -222,13 +225,14 @@ class FacebookSession
         self::$defaultAppSecret,
       'code' => $parsedSignedRequest['code']
     );
-    $response = (new FacebookRequest(
+    $objFacebookRequest =new FacebookRequest(
       self::newAppSession(
         self::$defaultAppId, self::$defaultAppSecret),
       'GET',
       '/oauth/access_token',
       $params
-    ))->execute()->getResponse();
+    );
+    $response = $objFacebookRequest->execute()->getResponse();
     if (isset($response['access_token'])) {
       return new FacebookSession($response['access_token']);
     }
